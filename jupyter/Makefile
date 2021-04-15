@@ -1,0 +1,20 @@
+CONTAINER_REGISTRY=gcr.io/tink-containers
+
+BASE_VERSION=$(shell docker/scripts/base_version)
+
+default: help
+
+help:
+	@echo 'Usage: make <target>'
+	@echo
+	@echo
+	@echo 'Targets:'
+	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep  \
+	| sed -e 's/^\(.*\):[^#]*#\(.*\)/\1 \2/' | tr '#' "\t"
+
+#--------------------
+# Jupyter
+#--------------------
+
+start-jupyter: ## Starting a local jupyter notebook
+	docker run -p 8888:8888 -v $(shell pwd)/notes:/home/jovyan/work jupyter/minimal-notebook
